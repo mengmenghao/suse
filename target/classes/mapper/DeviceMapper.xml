@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sus.dao.DeviceMapper">
+  <resultMap id="BaseResultMap" type="com.sus.bean.Device">
+    <id column="device_Id" jdbcType="INTEGER" property="deviceId" />
+    <result column="device_Content" jdbcType="VARCHAR" property="deviceContent" />
+    <result column="subscriber_Id" jdbcType="INTEGER" property="subscriberId" />
+    <result column="device_Status" jdbcType="VARCHAR" property="deviceStatus" />
+    <result column="process" jdbcType="VARCHAR" property="process" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    device_Id, device_Content, subscriber_Id, device_Status, process
+  </sql>
+  <select id="selectByExample" parameterType="com.sus.bean.DeviceExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from device
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from device
+    where device_Id = #{deviceId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from device
+    where device_Id = #{deviceId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sus.bean.DeviceExample">
+    delete from device
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sus.bean.Device">
+    insert into device (device_Id, device_Content, subscriber_Id,
+      device_Status, process)
+    values (#{deviceId,jdbcType=INTEGER}, #{deviceContent,jdbcType=VARCHAR}, #{subscriberId,jdbcType=INTEGER},
+      #{deviceStatus,jdbcType=VARCHAR}, #{process,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sus.bean.Device">
+    insert into device
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deviceId != null">
+        device_Id,
+      </if>
+      <if test="deviceContent != null">
+        device_Content,
+      </if>
+      <if test="subscriberId != null">
+        subscriber_Id,
+      </if>
+      <if test="deviceStatus != null">
+        device_Status,
+      </if>
+      <if test="process != null">
+        process,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deviceId != null">
+        #{deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceContent != null">
+        #{deviceContent,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriberId != null">
+        #{subscriberId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceStatus != null">
+        #{deviceStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="process != null">
+        #{process,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sus.bean.DeviceExample" resultType="java.lang.Long">
+    select count(*) from device
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update device
+    <set>
+      <if test="record.deviceId != null">
+        device_Id = #{record.deviceId,jdbcType=INTEGER},
+      </if>
+      <if test="record.deviceContent != null">
+        device_Content = #{record.deviceContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subscriberId != null">
+        subscriber_Id = #{record.subscriberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.deviceStatus != null">
+        device_Status = #{record.deviceStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.process != null">
+        process = #{record.process,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update device
+    set device_Id = #{record.deviceId,jdbcType=INTEGER},
+      device_Content = #{record.deviceContent,jdbcType=VARCHAR},
+      subscriber_Id = #{record.subscriberId,jdbcType=INTEGER},
+      device_Status = #{record.deviceStatus,jdbcType=VARCHAR},
+      process = #{record.process,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sus.bean.Device">
+    update device
+    <set>
+      <if test="deviceContent != null">
+        device_Content = #{deviceContent,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriberId != null">
+        subscriber_Id = #{subscriberId,jdbcType=INTEGER},
+      </if>
+      <if test="deviceStatus != null">
+        device_Status = #{deviceStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="process != null">
+        process = #{process,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where device_Id = #{deviceId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sus.bean.Device">
+    update device
+    set device_Content = #{deviceContent,jdbcType=VARCHAR},
+      subscriber_Id = #{subscriberId,jdbcType=INTEGER},
+      device_Status = #{deviceStatus,jdbcType=VARCHAR},
+      process = #{process,jdbcType=VARCHAR}
+    where device_Id = #{deviceId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sus.dao.FloorMapper">
+  <resultMap id="BaseResultMap" type="com.sus.bean.Floor">
+    <result column="floor_Id" jdbcType="INTEGER" property="floorId" />
+    <result column="floor_Name" jdbcType="VARCHAR" property="floorName" />
+  </resultMap>
+  <resultMap id="DormitoryResultMap" type="com.sus.bean.Floor">
+    <result column="floor_Id" jdbcType="INTEGER" property="floorId" />
+    <result column="floor_Name" jdbcType="VARCHAR" property="floorName" />
+    <association property="dormitory" javaType="com.sus.bean.Dormitory">
+      <id column="floor_Id" property="floorId"></id>
+      <result column="dormitory_Name" property="dormitoryName"></result>
+      <result column="dormitory_Id" property="dormitoryId"></result>
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    floor_Id, floor_Name
+  </sql>
+  <sql id="Dormitory_Column_List">
+    f.floor_Id, floor_Name,dormitory_Id,dormitory_Name
+  </sql>
+  <select id="selectFloor" resultMap="BaseResultMap">
+    select * from floor
+  </select>
+  <select id="selectFloorId" resultMap="BaseResultMap">
+    select * from floor where floor_Id=#{floorId}
+  </select>
+  <select id="selectByExampleDormitory" parameterType="com.sus.bean.FloorExample" resultMap="DormitoryResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Dormitory_Column_List" />
+    from floor as f LEFT JOIN dormitory as d on f.floor_Id=d.floor_Id
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.sus.bean.FloorExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from floor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.sus.bean.FloorExample">
+    delete from floor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from floor
+    where floor_Id = #{floorId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sus.bean.Floor">
+    insert into floor (floor_Id, floor_Name)
+    values (#{floorId,jdbcType=INTEGER}, #{floorName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sus.bean.Floor">
+    insert into floor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="floorId != null">
+        floor_Id,
+      </if>
+      <if test="floorName != null">
+        floor_Name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="floorId != null">
+        #{floorId,jdbcType=INTEGER},
+      </if>
+      <if test="floorName != null">
+        #{floorName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sus.bean.FloorExample" resultType="java.lang.Long">
+    select count(*) from floor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update floor
+    <set>
+      <if test="record.floorId != null">
+        floor_Id = #{record.floorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.floorName != null">
+        floor_Name = #{record.floorName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update floor
+    set floor_Id = #{record.floorId,jdbcType=INTEGER},
+      floor_Name = #{record.floorName,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sus.bean.Floor">
+    update floor
+    <set>
+      <if test="floorName != null">
+        floor_Name = #{floorName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where floor_Id = #{floorId,jdbcType=INTEGER}
+  </update>
+</mapper>

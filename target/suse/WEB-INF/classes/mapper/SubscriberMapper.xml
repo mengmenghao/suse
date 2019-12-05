@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sus.dao.SubscriberMapper">
+  <resultMap id="BaseResultMap" type="com.sus.bean.Subscriber">
+    <id column="subscriber_Id" jdbcType="INTEGER" property="subscriberId" />
+    <result column="subscriber_Name" jdbcType="VARCHAR" property="subscriberName" />
+    <result column="subscriber_Password" jdbcType="VARCHAR" property="subscriberPassword" />
+    <result column="subscriber_Permission" jdbcType="INTEGER" property="subscriberPermission" />
+    <result column="dormitory_Id" jdbcType="INTEGER" property="dormitoryId" />
+  </resultMap>
+  <resultMap id="WithDormitory" type="com.sus.bean.Subscriber">
+    <id column="subscriber_Id" jdbcType="INTEGER" property="subscriberId" />
+    <result column="subscriber_Name" jdbcType="VARCHAR" property="subscriberName" />
+    <result column="subscriber_Password" jdbcType="VARCHAR" property="subscriberPassword" />
+    <result column="subscriber_Permission" jdbcType="INTEGER" property="subscriberPermission" />
+    <result column="dormitory_Id" jdbcType="INTEGER" property="dormitoryId" />
+    <association property="dormitory" javaType="com.sus.bean.Dormitory">
+      <id column="dormitory_Id" property="dormitoryId"></id>
+      <result column="dormitory_Name" property="dormitoryName"></result>
+      <result column="floor_Id" property="floorId"></result>
+      <association property="floor" javaType="com.sus.bean.Floor">
+        <id column="floor_Id" property="floorId"></id>
+        <result column="floor_Name" property="floorName"></result>
+      </association>
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    subscriber_Id, subscriber_Name, subscriber_Password, subscriber_Permission, dormitory_Id
+  </sql>
+  <sql id="WithDormitory_Column_List">
+    subscriber_Id,subscriber_Name,subscriber_Password,subscriber_Permission,d.dormitory_Id,dormitory_Name,f.floor_Id,floor_Name
+  </sql>
+  <!--查询带宿舍信息-->
+  <select id="selectByExampleWithDormitory" resultMap="WithDormitory">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="WithDormitory_Column_List" />
+    from subscriber as s LEFT JOIN dormitory as d on s.dormitory_Id=d.dormitory_Id LEFT JOIN floor as f on d.floor_Id=f.floor_Id
+    <if test="_parameter != null">
+      <include refid="WithDormitory_Column_List" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    ORDER BY subscriber_Id ASC
+  </select>
+  <select id="login" resultMap="WithDormitory">
+    select subscriber_Id,subscriber_Name,subscriber_Password,subscriber_Permission,d.dormitory_Id,dormitory_Name,f.floor_Id,floor_Name
+    from subscriber as s LEFT JOIN dormitory as d on s.dormitory_Id=d.dormitory_Id LEFT JOIN floor as f on d.floor_Id=f.floor_Id where subscriber_Name=#{subscriberName,jdbcType=VARCHAR }
+  </select>
+  <select id="selectByPrimaryKeyWithDormitory" resultMap="WithDormitory">
+    select
+    <include refid="WithDormitory_Column_List" />
+    from subscriber as s LEFT JOIN dormitory as d on s.dormitory_Id=d.dormitory_Id LEFT JOIN floor as f on d.floor_Id=f.floor_Id
+    where subscriber_Id = #{subscriberId,jdbcType=INTEGER}
+  </select>
+  <!--查询不带宿舍信息-->
+  <select id="selectByExample" parameterType="com.sus.bean.SubscriberExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from subscriber
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from subscriber
+    where subscriber_Id = #{subscriberId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from subscriber
+    where subscriber_Id = #{subscriberId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sus.bean.SubscriberExample">
+    delete from subscriber
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sus.bean.Subscriber">
+    insert into subscriber (subscriber_Id, subscriber_Name, subscriber_Password, 
+      subscriber_Permission, dormitory_Id)
+    values (#{subscriberId,jdbcType=INTEGER}, #{subscriberName,jdbcType=VARCHAR}, #{subscriberPassword,jdbcType=VARCHAR}, 
+      #{subscriberPermission,jdbcType=INTEGER}, #{dormitoryId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sus.bean.Subscriber">
+    insert into subscriber
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="subscriberId != null">
+        subscriber_Id,
+      </if>
+      <if test="subscriberName != null">
+        subscriber_Name,
+      </if>
+      <if test="subscriberPassword != null">
+        subscriber_Password,
+      </if>
+      <if test="subscriberPermission != null">
+        subscriber_Permission,
+      </if>
+      <if test="dormitoryId != null">
+        dormitory_Id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="subscriberId != null">
+        #{subscriberId,jdbcType=INTEGER},
+      </if>
+      <if test="subscriberName != null">
+        #{subscriberName,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriberPassword != null">
+        #{subscriberPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriberPermission != null">
+        #{subscriberPermission,jdbcType=INTEGER},
+      </if>
+      <if test="dormitoryId != null">
+        #{dormitoryId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sus.bean.SubscriberExample" resultType="java.lang.Long">
+    select count(*) from subscriber
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update subscriber
+    <set>
+      <if test="record.subscriberId != null">
+        subscriber_Id = #{record.subscriberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subscriberName != null">
+        subscriber_Name = #{record.subscriberName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subscriberPassword != null">
+        subscriber_Password = #{record.subscriberPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subscriberPermission != null">
+        subscriber_Permission = #{record.subscriberPermission,jdbcType=INTEGER},
+      </if>
+      <if test="record.dormitoryId != null">
+        dormitory_Id = #{record.dormitoryId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update subscriber
+    set subscriber_Id = #{record.subscriberId,jdbcType=INTEGER},
+      subscriber_Name = #{record.subscriberName,jdbcType=VARCHAR},
+      subscriber_Password = #{record.subscriberPassword,jdbcType=VARCHAR},
+      subscriber_Permission = #{record.subscriberPermission,jdbcType=INTEGER},
+      dormitory_Id = #{record.dormitoryId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sus.bean.Subscriber">
+    update subscriber
+    <set>
+      <if test="subscriberName != null">
+        subscriber_Name = #{subscriberName,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriberPassword != null">
+        subscriber_Password = #{subscriberPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriberPermission != null">
+        subscriber_Permission = #{subscriberPermission,jdbcType=INTEGER},
+      </if>
+      <if test="dormitoryId != null">
+        dormitory_Id = #{dormitoryId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where subscriber_Id = #{subscriberId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sus.bean.Subscriber">
+    update subscriber
+    set subscriber_Name = #{subscriberName,jdbcType=VARCHAR},
+      subscriber_Password = #{subscriberPassword,jdbcType=VARCHAR},
+      subscriber_Permission = #{subscriberPermission,jdbcType=INTEGER},
+      dormitory_Id = #{dormitoryId,jdbcType=INTEGER}
+    where subscriber_Id = #{subscriberId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sus.dao.AnnouncementMapper">
+  <resultMap id="BaseResultMap" type="com.sus.bean.Announcement">
+    <id column="announcement_Id" jdbcType="INTEGER" property="announcementId" />
+    <result column="announcement_Name" jdbcType="VARCHAR" property="announcementName" />
+    <result column="announcement_Content" jdbcType="VARCHAR" property="announcementContent" />
+    <result column="announcement_Time" jdbcType="VARCHAR" property="announcementTime" />
+    <result column="subscriber_Id" jdbcType="INTEGER" property="subscriberId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    announcement_Id, announcement_Name, announcement_Content, announcement_Time, subscriber_Id
+  </sql>
+  <select id="selectByExample" parameterType="com.sus.bean.AnnouncementExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from announcement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from announcement
+    where announcement_Id = #{announcementId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from announcement
+    where announcement_Id = #{announcementId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sus.bean.AnnouncementExample">
+    delete from announcement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sus.bean.Announcement">
+    insert into announcement (announcement_Id, announcement_Name,
+      announcement_Content, announcement_Time,
+      subscriber_Id)
+    values (#{announcementId,jdbcType=INTEGER}, #{announcementName,jdbcType=VARCHAR}, 
+      #{announcementContent,jdbcType=VARCHAR}, #{announcementTime,jdbcType=VARCHAR}, 
+      #{subscriberId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sus.bean.Announcement">
+    insert into announcement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="announcementId != null">
+        announcement_Id,
+      </if>
+      <if test="announcementName != null">
+        announcement_Name,
+      </if>
+      <if test="announcementContent != null">
+        announcement_Content,
+      </if>
+      <if test="announcementTime != null">
+        announcement_Time,
+      </if>
+      <if test="subscriberId != null">
+        subscriber_Id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="announcementId != null">
+        #{announcementId,jdbcType=INTEGER},
+      </if>
+      <if test="announcementName != null">
+        #{announcementName,jdbcType=VARCHAR},
+      </if>
+      <if test="announcementContent != null">
+        #{announcementContent,jdbcType=VARCHAR},
+      </if>
+      <if test="announcementTime != null">
+        #{announcementTime,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriberId != null">
+        #{subscriberId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sus.bean.AnnouncementExample" resultType="java.lang.Long">
+    select count(*) from announcement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update announcement
+    <set>
+      <if test="record.announcementId != null">
+        announcement_Id = #{record.announcementId,jdbcType=INTEGER},
+      </if>
+      <if test="record.announcementName != null">
+        announcement_Name = #{record.announcementName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.announcementContent != null">
+        announcement_Content = #{record.announcementContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.announcementTime != null">
+        announcement_Time = #{record.announcementTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subscriberId != null">
+        subscriber_Id = #{record.subscriberId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update announcement
+    set announcement_Id = #{record.announcementId,jdbcType=INTEGER},
+      announcement_Name = #{record.announcementName,jdbcType=VARCHAR},
+      announcement_Content = #{record.announcementContent,jdbcType=VARCHAR},
+      announcement_Time = #{record.announcementTime,jdbcType=VARCHAR},
+    subscriber_Id = #{record.subscriberId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sus.bean.Announcement">
+    update announcement
+    <set>
+      <if test="announcementName != null">
+        announcement_Name = #{announcementName,jdbcType=VARCHAR},
+      </if>
+      <if test="announcementContent != null">
+        announcement_Content = #{announcementContent,jdbcType=VARCHAR},
+      </if>
+      <if test="announcementTime != null">
+        announcement_Time = #{announcementTime,jdbcType=VARCHAR},
+      </if>
+      <if test="subscriberId != null">
+        subscriber_Id = #{subscriberId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where announcement_Id = #{announcementId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sus.bean.Announcement">
+    update announcement
+    set announcement_Name = #{announcementName,jdbcType=VARCHAR},
+      announcement_Content = #{announcementContent,jdbcType=VARCHAR},
+      announcement_Time = #{announcementTime,jdbcType=VARCHAR},
+      subscriber_Id = #{subscriberId,jdbcType=INTEGER}
+    where announcement_Id = #{announcementId,jdbcType=INTEGER}
+  </update>
+</mapper>
