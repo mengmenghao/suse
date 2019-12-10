@@ -20,6 +20,12 @@
             <param-value>classpath:springMvc.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
+        <!--配置文件上传路径，每个文件上传的最大大小，每个请求上传文件的最大值-->
+        <multipart-config>
+            <location>./static/img/</location>
+            <max-file-size>1240000</max-file-size>
+            <max-request-size>65</max-request-size>
+        </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>springDispatcherServlet</servlet-name>

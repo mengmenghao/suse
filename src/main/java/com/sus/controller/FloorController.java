@@ -43,6 +43,20 @@ public class FloorController {
         PageInfo page = new PageInfo(subscribers, 5);
         return Msg.success().add("pageInfo", page);
     }
+    /**
+     * 查询所有楼栋不分页
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping("/getFloors")
+    @ResponseBody
+    public Msg getFloorsJson(Model model) {
+        System.out.println("执行getFloorsJson");
+        //startPage后面紧跟的这个查询就是一个分页查询
+        List<Floor> subscribers = floorServiceImpl.showAll();
+        return Msg.success().add("pageInfo", subscribers);
+    }
 
     /**
      * 添加保存楼栋
@@ -54,7 +68,7 @@ public class FloorController {
     @ResponseBody
     public Msg saveFloor(@Valid Floor floor, BindingResult result) {
         System.out.println("添加保存楼栋");
-        floorServiceImpl.saveSubscriber(floor);
+        floorServiceImpl.saveFloor(floor);
         return Msg.success();
 
     }
@@ -97,7 +111,7 @@ public class FloorController {
     @RequestMapping(value = "/updateFloor/{floorId}",method = RequestMethod.PUT)
     public Msg saveSubscriber(Floor floor){
         System.out.println(floor);
-        floorServiceImpl.updateSubscriber(floor);
+        floorServiceImpl.updateFloor(floor);
         return Msg.success();
     }
     /**

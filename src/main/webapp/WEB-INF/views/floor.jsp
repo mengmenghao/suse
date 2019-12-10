@@ -131,7 +131,7 @@
                 type:"GET",
                 success:function (result) {
                     //console.log(result);
-                    /*1、解析并显示员工数据*/
+                    /*1、解析并显示楼栋数据*/
                     build_floors_table(result);
                     /*  2、解析显示分页信息*/
                     build_page_info(result);
@@ -274,7 +274,7 @@
                 type:"POST",
                 success:function (result) {
                     if (result.code==100){
-                        show_validate_msg("#floorName_add_input","success","用户名可用");
+                        show_validate_msg("#floorName_add_input","success","楼栋名可用");
                         $("#floor_save_btn").attr("ajax-va","success");
                     }else {
                         show_validate_msg("#floorName_add_input","error",result.extend.va_msg);
@@ -331,7 +331,7 @@
          * @param floorId
          */
         function getFloor(floorId) {
-            $("#floor_update_select").empty();
+            //$("#floor_update_select").empty();
             $.ajax({
                 url:"${APP_PATH}/floor/getUpdateFloor/"+floorId,
                 type:"GET",
@@ -355,7 +355,7 @@
                 type:"POST",
                 success:function (result) {
                     if (result.code==100){
-                        show_validate_msg("#floorName_update_input","success","用户名可用");
+                        show_validate_msg("#floorName_update_input","success","楼栋名可用");
                         $("#floor_update_btn").attr("ajax-va","success");
                     }else {
                         show_validate_msg("#floorName_update_input","error",result.extend.va_msg);
@@ -386,7 +386,7 @@
                         //console.log();
                         //有哪个字段的错误信息就显示哪个字段
                         if (undefined != result.extend.errorFields.floorName){
-                            show_validate_msg("#floorName_add_input","error",result.extend.errorFields.floorName);
+                            show_validate_msg("#floorName_update_input","error",result.extend.errorFields.floorName);
                         }
                     }
                 }

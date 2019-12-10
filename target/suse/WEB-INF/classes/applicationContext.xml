@@ -69,10 +69,7 @@
     </tx:advice>
 <!--    &lt;!&ndash;开启基于注解的事务管理&ndash;&gt;
     <tx:annotation-driven transaction-manager="transactionManager"/>-->
-
     <aop:aspectj-autoproxy/>
     <!--<mybatis:scan base-package="com.sus.dao"/>-->
     <!--Spring配置文件的核心点（数据源、与mybatis的整合、事务控制）-->
-
-
 </beans>

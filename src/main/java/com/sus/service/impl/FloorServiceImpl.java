@@ -27,7 +27,7 @@ public class FloorServiceImpl implements FloorService {
      * @param floor
      */
     @Override
-    public void saveSubscriber(Floor floor) {
+    public void saveFloor(Floor floor) {
         floorMapper.insertSelective(floor);
     }
 
@@ -61,7 +61,7 @@ public class FloorServiceImpl implements FloorService {
      * @param floor
      */
     @Override
-    public void updateSubscriber(Floor floor) {
+    public void updateFloor(Floor floor) {
         floorMapper.updateByPrimaryKeySelective(floor);
     }
 

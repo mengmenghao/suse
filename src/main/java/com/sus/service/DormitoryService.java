@@ -12,5 +12,21 @@ public interface DormitoryService {
 
     List<Dormitory> getDormitories(Integer floor_Id);
 
-    List<Floor> getDormitoriess();
+    List<Floor> getDormitories();
+
+    List<Dormitory> showAll(Integer floorId);
+
+    boolean checkDormitoryName(String dormitoryName,Integer floorId);
+
+    void saveDormitory(Dormitory dormitory, Integer floorId);
+
+    void saveDormitory(Dormitory dormitory);
+
+    Dormitory getUpdateDormitory(Integer dormitoryId);
+
+    void updateDormitory(Integer dormitoryId, String dormitoryName);
+
+    void deleteDormitory(Integer dormitoryId);
+
+    void deleteBath(List<Integer> del_dormitoryIds);
 }
